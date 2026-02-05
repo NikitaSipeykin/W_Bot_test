@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whatsapp-bot
+  namespace: wbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whatsapp-bot
+  template:
+    metadata:
+      labels:
+        app: whatsapp-bot
+    spec:
+      containers:
+        - name: whatsapp-bot
+          image: ghcr.io/niksipeikin/whatsapp-bot:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: wbot-secrets
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
